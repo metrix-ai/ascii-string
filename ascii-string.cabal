@@ -1,7 +1,7 @@
 name:
   ascii-string
 version:
-  1
+  1.0.0.1
 synopsis:
   Compact representation of ASCII strings
 description:
