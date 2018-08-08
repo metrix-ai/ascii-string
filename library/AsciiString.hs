@@ -32,8 +32,8 @@ deriving instance Ord AsciiString
 deriving instance Generic AsciiString
 
 instance Hashable AsciiString where
-  hashWithSalt salt (AsciiString size (PrimArray ba)) =
-    hashByteArrayWithSalt ba 0 size salt
+  hashWithSalt salt (AsciiString size pa@(PrimArray ba)) =
+    hashByteArrayWithSalt ba 0 (sizeofPrimArray pa) (hashWithSalt salt size)
 
 instance Show AsciiString where
   show = show . toByteString

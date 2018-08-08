@@ -6,6 +6,7 @@ import Test.Tasty
 import Test.Tasty.Runners
 import Test.Tasty.HUnit
 import Test.Tasty.QuickCheck
+import AsciiString (AsciiString)
 import qualified Test.QuickCheck as QuickCheck
 import qualified Test.QuickCheck.Property as QuickCheck
 import qualified Data.ByteString as ByteString
@@ -46,4 +47,8 @@ main =
         ,
         testProperty "Cereal Roundtrip" $ forAll asciiStringGen $ \ asciiString ->
         Right asciiString === Serialize.decode (Serialize.encode asciiString)
+        ,
+        testProperty "Hashing" $ forAll asciiStringGen $ \ asciiString ->
+        Right (hash asciiString) ===
+        fmap (hash :: AsciiString -> Int) (Serialize.decode (Serialize.encode asciiString))
       ]
