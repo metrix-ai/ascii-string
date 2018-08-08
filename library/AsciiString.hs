@@ -31,6 +31,9 @@ deriving instance Eq AsciiString
 deriving instance Ord AsciiString
 deriving instance Generic AsciiString
 
+instance NFData AsciiString where
+  rnf a = seq a ()
+
 instance Hashable AsciiString where
   hashWithSalt salt (AsciiString size pa@(PrimArray ba)) =
     hashByteArrayWithSalt ba 0 (sizeofPrimArray pa) (hashWithSalt salt size)

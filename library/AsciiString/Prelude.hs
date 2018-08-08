@@ -98,6 +98,10 @@ import DeferredFolds.UnfoldM as Exports (UnfoldM(..))
 -------------------------
 import Data.Hashable as Exports
 
+-- deepseq
+-------------------------
+import Control.DeepSeq as Exports
+
 
 data Product2 a b = Product2 !a !b
 

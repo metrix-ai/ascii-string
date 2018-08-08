@@ -42,6 +42,7 @@ library
     base >=4.7 && <5,
     bytestring >=0.10 && <0.11,
     cereal >=0.5.5 && <0.6,
+    deepseq >=1.4 && <2,
     deferred-folds >=0.6.11 && <0.7,
     foldl >=1.4 && <2,
     hashable >=1.2.7 && <2,
