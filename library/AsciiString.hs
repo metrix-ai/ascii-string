@@ -15,7 +15,7 @@ import AsciiString.Prelude hiding (length)
 import qualified Data.List as List
 import qualified Data.ByteString as ByteString
 import qualified Data.ByteString.Short.Internal as ShortByteString
-import qualified DeferredFolds.UnfoldM as UnfoldM
+import qualified DeferredFolds.UnfoldlM as UnfoldlM
 import qualified AsciiString.FoldMs as FoldMs
 import qualified Control.Foldl as Foldl
 import qualified PrimitiveExtras.PrimArray as PrimArray
@@ -62,30 +62,30 @@ length (AsciiString length _) = length
 {-| Construct from a list of septets encoded in 'Word8', ignoring the 8th bit. -}
 fromSeptetList :: [Word8] -> AsciiString
 fromSeptetList list = 
-  fromUnfoldM (List.length list) (UnfoldM.foldable list)
+  fromUnfoldlM (List.length list) (UnfoldlM.foldable list)
 
 {-|
 Convert from ByteString, ignoring each 8th bit in it.
 -}
 fromByteString :: ByteString -> AsciiString
 fromByteString byteString = 
-  fromUnfoldM (ByteString.length byteString) (UnfoldM.byteStringBytes byteString)
+  fromUnfoldlM (ByteString.length byteString) (UnfoldlM.byteStringBytes byteString)
 
 {-|
 Convert from ShortByteString, ignoring each 8th bit in it.
 -}
 fromShortByteString :: ShortByteString -> AsciiString
 fromShortByteString byteString =
-  fromUnfoldM (ShortByteString.length byteString) (UnfoldM.shortByteStringBytes byteString)
+  fromUnfoldlM (ShortByteString.length byteString) (UnfoldlM.shortByteStringBytes byteString)
 
-{-# INLINE fromUnfoldM #-}
-fromUnfoldM :: Int -> UnfoldM IO Word8 -> AsciiString
-fromUnfoldM size unfoldM =
-  AsciiString size (unsafeDupablePerformIO (UnfoldM.foldM (FoldMs.sizedSeptetPrimArrayFromSeptets size) unfoldM))
+{-# INLINE fromUnfoldlM #-}
+fromUnfoldlM :: Int -> UnfoldlM IO Word8 -> AsciiString
+fromUnfoldlM size unfoldM =
+  AsciiString size (unsafeDupablePerformIO (UnfoldlM.foldM (FoldMs.sizedSeptetPrimArrayFromSeptets size) unfoldM))
 
 {-| Convert to a list of septets represented by 'Word8' with the 8th bit always empty. -}
 toSeptetList :: AsciiString -> [Word8]
-toSeptetList = unsafeDupablePerformIO . UnfoldM.foldM (Foldl.generalize Foldl.list) . toOctetUnfoldM
+toSeptetList = unsafeDupablePerformIO . UnfoldlM.foldM (Foldl.generalize Foldl.list) . toOctetUnfoldlM
 
 {-| Convert to bytestring. -}
 toByteString :: AsciiString -> ByteString
@@ -97,11 +97,11 @@ toShortByteString = primArraySBS . unsafeDupablePerformIO . runSizedFoldM PrimAr
   primArraySBS :: PrimArray Word8 -> ShortByteString
   primArraySBS (PrimArray ba) = ShortByteString.SBS ba
 
-toOctetUnfoldM :: AsciiString -> UnfoldM IO Word8
-toOctetUnfoldM (AsciiString size pa) = let
+toOctetUnfoldlM :: AsciiString -> UnfoldlM IO Word8
+toOctetUnfoldlM (AsciiString size pa) = let
   takeLast = rem (7 * succ size) 8 /= 0
-  in UnfoldM.mapFoldMInput (FoldMs.overSeptets takeLast) (UnfoldM.primArray pa)
+  in UnfoldlM.mapFoldMInput (FoldMs.overSeptets takeLast) (UnfoldlM.primArray pa)
 
 runSizedFoldM :: (Int -> FoldM IO Word8 output) -> AsciiString -> IO output
 runSizedFoldM fold asciiString =
-  UnfoldM.foldM (fold (length asciiString)) (toOctetUnfoldM asciiString)
+  UnfoldlM.foldM (fold (length asciiString)) (toOctetUnfoldlM asciiString)

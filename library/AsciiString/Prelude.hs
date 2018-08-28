@@ -91,8 +91,9 @@ import Control.Foldl as Exports (Fold(..), FoldM(..))
 
 -- deferred-folds
 -------------------------
-import DeferredFolds.Unfold as Exports (Unfold(..))
-import DeferredFolds.UnfoldM as Exports (UnfoldM(..))
+import DeferredFolds.Unfoldl as Exports (Unfoldl(..))
+import DeferredFolds.UnfoldlM as Exports (UnfoldlM(..))
+import DeferredFolds.Unfoldr as Exports (Unfoldr(..))
 
 -- hashable
 -------------------------
