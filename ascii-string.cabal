@@ -1,5 +1,5 @@
 name: ascii-string
-version: 1.0.1.1
+version: 1.0.1.2
 synopsis: Compact representation of ASCII strings
 description:
   ASCII strings stored using just 7 bits per character.
