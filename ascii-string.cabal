@@ -31,8 +31,8 @@ library
     deferred-folds >=0.9 && <0.10,
     foldl >=1.4 && <2,
     hashable >=1.2.7 && <2,
-    primitive >=0.6.4 && <0.7,
-    primitive-extras >=0.7 && <0.8
+    primitive >=0.7 && <0.8,
+    primitive-extras >=0.8 && <0.9
 
 test-suite test
   type: exitcode-stdio-1.0
